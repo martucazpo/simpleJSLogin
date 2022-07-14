@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Login Example</h1>
+      </header>
+      <section class="section reg-section">
+        <h2>Register</h2>
+        <form id="regForm" class="registration-form">
+          <label for="name">First Name</label>
+          <input name="name" id="name" />
+          <label for="lastname">Last Name</label>
+          <input name="lastname" id="lastname" />
+          <label for="email">Email</label>
+          <input name="email" id="email" />
+          <label for="password1">Enter Password</label>
+          <input name="password1" id="password1" />
+          <label for="password2">Please Re-enter Password</label>
+          <input name="password2" id="password2" />
+          <button type="submit">REGISTER</button>
+        </form>
+        <div id="regMessageDiv"></div>
+      </section>
+      <section class="section login-section">
+        <h2>Login</h2>
+        <form id="loginForm" class="login-form">
+          <label for="email">Email</label>
+          <input name="email" id="email" />
+          <label for="password1">Enter Password</label>
+          <input name="password1" id="password1" />
+          <button type="submit">LOGIN</button>
+        </form>
+        <div id="logMessageDiv"></div>
+      </section>
+    </main>
+
+    <script src="./bcrypt.min.js"></script>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
