@@ -69,6 +69,7 @@ function submitRegistration(e) {
         if (db[i].email === email) {
           regMessageDiv.innerHTML =
             "<small style='color:red;'>Email Already in Database</small>";
+            return
         } else {
           //If email is not in database, user can register
           //encrypting password
@@ -84,6 +85,9 @@ function submitRegistration(e) {
           //letting user know s/he is registered
           regMessageDiv.innerHTML =
             "<small style='color:red;'>Registered</small>";
+            clearInputs(inputs);
+            clearState(state);
+            return
         }
       }
     } else {
@@ -94,14 +98,15 @@ function submitRegistration(e) {
       db.push(newUser);
       sessionStorage.setItem("db", JSON.stringify(db));
       regMessageDiv.innerHTML = "<small style='color:red;'>Registered</small>";
+      clearInputs(inputs);
+      clearState(state);
+      return
     }
   } else {
     regMessageDiv.innerHTML =
       "<small style='color:red;'>Passwords do not match</small>";
+      return
   }
-  //clears inputs, cleans out state
-  clearInputs(inputs);
-  clearState(state);
 }
 
 function submitLogin(e) {
@@ -123,20 +128,26 @@ function submitLogin(e) {
       if (bcrypt.compareSync(password, db[i].password)) {
         //if password passes, send message
         logMessageDiv.innerHTML = "<h3 style='color:red;'>Logged in</h3>";
+        clearInputs(inputs);
+        clearState(state);
+        return
       } else {
         //if password fails, send message
         logMessageDiv.innerHTML =
           "<small style='color:red;'>There was a problem with the password</small>";
+          clearInputs(inputs);
+          clearState(state);
+          return
       }
     } else {
       //if the email was not in the database, send message
       logMessageDiv.innerHTML =
         "<small style='color:red;'>The Email was not in our database</small>";
+        clearInputs(inputs);
+        clearState(state);
+        return
     }
   }
-  //clears inputs
-  clearInputs(inputs);
-  clearState(state);
 }
 //function to clear inputs
 function clearInputs(arr) {
