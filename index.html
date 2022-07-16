@@ -8,11 +8,13 @@
     <title>Document</title>
   </head>
   <body>
-    <main>
+    
       <header>
         <h1>Login Example</h1>
       </header>
-      <section class="section reg-section">
+      <main>
+      <section>
+        <article class="article reg-article">
         <h2>Register</h2>
         <form id="regForm" class="registration-form">
           <label for="name">First Name</label>
@@ -28,8 +30,8 @@
           <button type="submit">REGISTER</button>
         </form>
         <div id="regMessageDiv"></div>
-      </section>
-      <section class="section login-section">
+      </article>
+      <article class="article login-article">
         <h2>Login</h2>
         <form id="loginForm" class="login-form">
           <label for="email">Email</label>
@@ -39,7 +41,19 @@
           <button type="submit">LOGIN</button>
         </form>
         <div id="logMessageDiv"></div>
+      </article>
       </section>
+      <section>
+        <article class="article render-users-article">
+          <h3>Users</h3>
+          <div id="usersDiv"></div>
+        </article>
+        <article class="article edit-users-article">
+          <h3>Edit Users</h3>
+          <div id="editUserDiv"></div>
+        </article>
+      </section>
+      
     </main>
 
     <script src="./bcrypt.min.js"></script>

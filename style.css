@@ -1,12 +1,15 @@
-*,html,body,::before,::after{
-    margin:0;
-    padding:0;
+*,
+html,
+body,
+::before,
+::after {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    width:100vw;
-    height: 100vh;
+    width: 100vw;
     background-color: gray;
     display: flex;
     flex-direction: column;
@@ -15,7 +18,7 @@ body {
 }
 
 main {
-    width:100vw;
+    width: 100vw;
     max-width: 300px;
     display: flex;
     flex-direction: column;
@@ -24,6 +27,12 @@ main {
 }
 
 section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+article {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -54,4 +63,16 @@ form button {
 form button:hover {
     background-color: lightslategrey;
     color: black;
+}
+
+@media only screen and (min-width:600px){
+
+    main {
+        max-width: 600px;
+        flex-direction: row;
+    }
+
+    section {
+        margin: 0 1em;
+    }
 }

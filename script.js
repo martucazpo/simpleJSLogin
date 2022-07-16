@@ -9,7 +9,7 @@ if (sessionStorage.getItem("db")) {
 } else {
   sessionStorage.setItem("db", JSON.stringify([]));
 }
-console.log(db)
+console.log(db);
 //class constructor to mimic database model
 class User {
   constructor(id, name, lastname, email, password) {
@@ -33,6 +33,9 @@ const regForm = document.getElementById("regForm");
 const loginForm = document.getElementById("loginForm");
 const regMessageDiv = document.getElementById("regMessageDiv");
 const logMessageDiv = document.getElementById("logMessageDiv");
+const usersDiv = document.getElementById("usersDiv");
+const editUserDiv = document.getElementById("editUserDiv");
+const editMessageDiv = document.createElement("div");
 //assign submit functions to forms
 regForm.onsubmit = submitRegistration;
 loginForm.onsubmit = submitLogin;
@@ -69,7 +72,7 @@ function submitRegistration(e) {
         if (db[i].email === email) {
           regMessageDiv.innerHTML =
             "<small style='color:red;'>Email Already in Database</small>";
-            return
+          return;
         } else {
           //If email is not in database, user can register
           //encrypting password
@@ -85,9 +88,10 @@ function submitRegistration(e) {
           //letting user know s/he is registered
           regMessageDiv.innerHTML =
             "<small style='color:red;'>Registered</small>";
-            clearInputs(inputs);
-            clearState(state);
-            return
+          renderUsers();
+          clearInputs(inputs);
+          clearState(state);
+          return;
         }
       }
     } else {
@@ -100,12 +104,13 @@ function submitRegistration(e) {
       regMessageDiv.innerHTML = "<small style='color:red;'>Registered</small>";
       clearInputs(inputs);
       clearState(state);
-      return
+      renderUsers();
+      return;
     }
   } else {
     regMessageDiv.innerHTML =
       "<small style='color:red;'>Passwords do not match</small>";
-      return
+    return;
   }
 }
 
@@ -130,22 +135,22 @@ function submitLogin(e) {
         logMessageDiv.innerHTML = "<h3 style='color:red;'>Logged in</h3>";
         clearInputs(inputs);
         clearState(state);
-        return
+        return;
       } else {
         //if password fails, send message
         logMessageDiv.innerHTML =
           "<small style='color:red;'>There was a problem with the password</small>";
-          clearInputs(inputs);
-          clearState(state);
-          return
+        clearInputs(inputs);
+        clearState(state);
+        return;
       }
     } else {
       //if the email was not in the database, send message
       logMessageDiv.innerHTML =
         "<small style='color:red;'>The Email was not in our database</small>";
-        clearInputs(inputs);
-        clearState(state);
-        return
+      clearInputs(inputs);
+      clearState(state);
+      return;
     }
   }
 }
@@ -159,5 +164,161 @@ function clearInputs(arr) {
 function clearState(obj) {
   for (let key in obj) {
     obj[key] = "";
+  }
+}
+
+function renderUsers() {
+  regMessageDiv.innerHTML = "";
+  logMessageDiv.innerHTML = "";
+  let users = JSON.parse(sessionStorage.getItem("db"));
+  usersDiv.innerHTML = "";
+  let usersUl = document.createElement("ul");
+  usersDiv.append(usersUl);
+  for (let i = 0; i < users.length; i++) {
+    let li = document.createElement("li");
+    li.innerHTML =
+      "<p>" +
+      users[i].name +
+      " " +
+      users[i].lastname +
+      "</p><p>" +
+      users[i].email +
+      "</p>";
+    let deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "DELETE";
+    deleteBtn.addEventListener("click", () => deleteUser(users[i].id));
+    let editBtn = document.createElement("button");
+    editBtn.innerText = "EDIT";
+    editBtn.addEventListener("click", () => editUser(users[i].id));
+    li.append(deleteBtn);
+    li.append(editBtn);
+    usersUl.append(li);
+  }
+}
+renderUsers();
+
+function deleteUser(id) {
+  let users = JSON.parse(sessionStorage.getItem("db"));
+  let meanGirls = [];
+  for (let i = 0; i < users.length; i++) {
+    if (id !== users[i].id) {
+      meanGirls.push(users[i]);
+    }
+  }
+  sessionStorage.setItem("db", JSON.stringify(meanGirls));
+  usersDiv.innerHTML = "";
+  renderUsers();
+}
+
+function editUser(id) {
+  editUserDiv.innerHTML = "";
+  let users = JSON.parse(sessionStorage.getItem("db"));
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].id === id) {
+      state.name = users[i].name;
+      state.lastname = users[i].lastname;
+      state.email = users[i].email;
+      const form = document.createElement("form");
+      //name
+      const nameLabel = document.createElement("label");
+      nameLabel.setAttribute("for", "editName");
+      nameLabel.innerText = "First Name";
+      const nameInput = document.createElement("input");
+      nameInput.setAttribute("name", "name");
+      nameInput.setAttribute("type", "text");
+      nameInput.setAttribute("id", "editName");
+      nameInput.setAttribute("value", users[i].name);
+      nameInput.addEventListener("input", handleInput);
+      form.append(nameLabel);
+      form.append(nameInput);
+      //lastname
+      const lastnameLabel = document.createElement("label");
+      lastnameLabel.setAttribute("for", "editLastname");
+      lastnameLabel.innerText = "Last Name";
+      const lastnameInput = document.createElement("input");
+      lastnameInput.setAttribute("name", "lastname");
+      lastnameInput.setAttribute("type", "text");
+      lastnameInput.setAttribute("id", "editLastname");
+      lastnameInput.setAttribute("value", users[i].lastname);
+      lastnameInput.addEventListener("input", handleInput);
+      form.append(lastnameLabel);
+      form.append(lastnameInput);
+      //email
+      const emailLabel = document.createElement("label");
+      emailLabel.setAttribute("for", "editEmail");
+      emailLabel.innerText = "Email";
+      const emailInput = document.createElement("input");
+      emailInput.setAttribute("name", "email");
+      emailInput.setAttribute("type", "text");
+      emailInput.setAttribute("id", "editEmail");
+      emailInput.setAttribute("value", users[i].email);
+      emailInput.addEventListener("input", handleInput);
+      form.append(emailLabel);
+      form.append(emailInput);
+      //password 1
+      const password1Label = document.createElement("label");
+      password1Label.setAttribute("for", "editPassword1");
+      password1Label.innerText = "Password";
+      const password1Input = document.createElement("input");
+      password1Input.setAttribute("name", "password1");
+      password1Input.setAttribute("id", "editPassword1");
+      password1Input.addEventListener("input", handleInput);
+      form.append(password1Label);
+      form.append(password1Input);
+      //password 2
+      const password2Label = document.createElement("label");
+      password2Label.setAttribute("for", "editPassword2");
+      password2Label.innerText = "Please Re-enter Password";
+      const password2Input = document.createElement("input");
+      password2Input.setAttribute("name", "password2");
+      password2Input.setAttribute("id", "editPassword2");
+      password2Input.addEventListener("input", handleInput);
+      form.append(password2Label);
+      form.append(password2Input);
+      //button
+      const submitBtn = document.createElement("button");
+      submitBtn.setAttribute("type", "submit");
+      submitBtn.innerText = "EDIT";
+      form.append(submitBtn);
+      form.addEventListener("submit", (e) => handleEdit(e, users[i].id));
+      editUserDiv.append(form);
+      editUserDiv.append(editMessageDiv);
+    }
+  }
+}
+
+function handleEdit(e, id) {
+  e.preventDefault();
+  let users = JSON.parse(sessionStorage.getItem("db"));
+  if (state.password1 !== state.password2) {
+    editMessageDiv.innerHTML =
+      "<small style='color:red;' >Passwords do not match</small>";
+    return;
+  } else {
+    let youveChanged = [];
+    console.log("USERS ", users);
+    for (let i = 0; i < users.length; i++) {
+      let password = "";
+      if (users[i].id === id) {
+        if (state.password1 !== "") {
+          let hashed = bcrypt.hashSync(state.password1, 10);
+          password = hashed;
+        } else {
+          password = users[i].password;
+        }
+        users[i].name = state.name;
+        users[i].lastname = state.lastname;
+        users[i].email = state.email;
+        users[i].password = password;
+        console.log("USERI ", users[i]);
+      }
+
+      youveChanged.push(users[i]);
+    }
+    sessionStorage.setItem("db", JSON.stringify(youveChanged));
+    clearState(state);
+    clearInputs(inputs);
+    editUserDiv.innerHTML = "";
+    renderUsers();
   }
 }
